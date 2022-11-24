@@ -84,7 +84,7 @@ app.post('/api/users/:_id/exercises', function (req, res, next) {
       $push: {
         log: {
           description: req.body.description,
-          duration: req.body.duration,
+          duration: parseInt(req.body.duration),
           date: res.locals.date,
         },
       },
@@ -97,7 +97,7 @@ app.post('/api/users/:_id/exercises', function (req, res, next) {
           _id: data._id,
           username: data.username,
           date: res.locals.date,
-          duration: req.body.duration,
+          duration: parseInt(req.body.duration),
           description: req.body.description,
         });
       }

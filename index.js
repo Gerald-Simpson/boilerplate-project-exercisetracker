@@ -73,8 +73,14 @@ app.get('/api/users', function (req, res, next) {
 
 //Add exercises
 app.post('/api/users/:_id/exercises', function (req, res, next) {
-  if (req.body.date === '') {
+  if ((req.body.date === '') | (req.body.date == undefined)) {
     res.locals.date = new Date().toDateString();
+  } else if (
+    (new Date(req.body.date) instanceof Error) |
+    isNaN(new Date(req.body.date))
+  ) {
+    console.error(new Date(req.body.date));
+    return next();
   } else {
     res.locals.date = new Date(req.body.date).toDateString();
   }
@@ -122,7 +128,9 @@ app.get(
     res.locals.log = [];
     let count = 0;
     res.locals.logData.log.forEach(function (obj) {
-      if (
+      if (req.query.limit <= count) {
+        return;
+      } else if (
         req.query.from != undefined &&
         new Date(obj.date) <= new Date(req.query.from)
       ) {
